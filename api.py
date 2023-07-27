@@ -1,11 +1,25 @@
-from flask import Flask, Response
+from flask import Response
+from database import get_database_connection
 from decorators import key_required
+from order import OrderService, OrderRepository, OrderDatabaseAdapter
+from user import PartialUser
+from app import create_app
 
-app = Flask(__name__)
+app = create_app()
 
 @app.route("/")
 @key_required
 def hello_world():
     return Response({
-        "greeting": ["hello", "world"]
+        "greeting2": ["hello", "world"]
     })
+
+@app.route("/orders")
+def list_orders():
+    service = OrderService(
+        OrderRepository(
+            OrderDatabaseAdapter(get_database_connection())
+        )
+    )
+    orders = service.get_orders_by_user(PartialUser(user_id="7fdbaa00-d971-47e2-8988-024e78bb6224"))
+    return Response(orders)
