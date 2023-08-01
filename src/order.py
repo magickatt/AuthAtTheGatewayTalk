@@ -1,7 +1,6 @@
 from enum import Enum
 from sqlite3 import Connection, Row
 from user import User, PartialUser
-from pdb import set_trace
 
 class OrderStatus(Enum):
 
