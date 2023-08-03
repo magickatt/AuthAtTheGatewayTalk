@@ -1,5 +1,5 @@
 from sqlite3 import Connection
-import order, user
+import order, user, key
 
 def create_order_service(database_connection: Connection) -> order.OrderService:
     return order.OrderService(
@@ -12,5 +12,12 @@ def create_user_service(database_connection: Connection) -> user.UserService:
     return user.UserService(
         user.UserRepository(
             user.UserDatabaseAdapter(database_connection)
+        )
+    )
+
+def create_key_service(database_connection: Connection) -> key.KeyService:
+    return key.KeyService(
+        key.KeyRepository(
+            key.KeyDatabaseAdapter(database_connection)
         )
     )

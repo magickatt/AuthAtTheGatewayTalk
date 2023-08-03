@@ -1,6 +1,7 @@
 from enum import Enum
 from sqlite3 import Connection, Row
 from user import User, PartialUser
+from pdb import set_trace
 
 class OrderStatus(Enum):
 
@@ -41,7 +42,7 @@ class OrderRepository:
 
     @staticmethod
     def _hydrate_order_from_record(record: Row) -> Order:
-        set_trace()
+        # set_trace()
         return Order(
             order_id=record["id"],
             user=PartialUser(user_id=record["user_id"]),

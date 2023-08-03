@@ -1,6 +1,5 @@
 from functools import wraps
 from flask import request, make_response, jsonify
-from factory import TokenFactory
 
 def key_required(f):
     """Authentication and authorisation decorator, used to wrap an API route 
@@ -12,8 +11,8 @@ def key_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         if 'x-mycompany-api-key' in request.headers:
-            api_key = request.headers['x-company-api-key']
-            return f(*args, **kwargs)
+            api_key = request.headers['x-mycompany-api-key']
+            return f(api_key, *args, **kwargs)
         return make_response(jsonify({"error": "Unauthorised"}), 401)
     return decorator
 

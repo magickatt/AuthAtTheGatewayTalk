@@ -42,7 +42,7 @@ class UserRepository:
         return [self._hydrate_user_from_record(record) for record in records]
 
     @staticmethod
-    def _hydrate_order_from_record(record: Row) -> User:
+    def _hydrate_user_from_record(record: Row) -> User:
         return User(
             user_id = record["id"],
             name = record["name"]
