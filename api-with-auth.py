@@ -19,7 +19,7 @@ def list_users():
 @key_required
 def list_orders(authenticated_user):
     service = create_order_service(get_database_connection())
-    orders = service.get_orders_by_user(PartialUser(user_id=authenticated_user.user_id))
+    orders = service.get_orders_by_user(authenticated_user)
     return jsonify({
         "user": f"{authenticated_user.name}",
         "orders": [order.model_dump() for order in orders]

@@ -2,7 +2,7 @@ from sqlite3 import Connection, Row
 
 from pydantic import BaseModel
 
-from key import Key, KeyRepository
+from key import PartialKey, KeyRepository
 
 
 class PartialUser(BaseModel):
@@ -18,7 +18,7 @@ class PartialUser(BaseModel):
 class User(PartialUser):
     "User that has placed orders."
     name: str
-    key: Key
+    key: PartialKey
 
     def __str__(self) -> str:
         return f"User '{self.name}'"

@@ -1,6 +1,6 @@
-from flask import Response, jsonify
+from flask import jsonify
 from database import get_database_connection
-from decorators import key_required
+from decorators import headers_required
 from factory import create_order_service, create_user_service
 from user import PartialUser
 from app import create_app
@@ -16,9 +16,10 @@ def list_users():
     })
 
 @app.route("/orders")
+@headers_required
 def list_orders(authenticated_user):
     service = create_order_service(get_database_connection())
-    orders = service.get_orders_by_user(PartialUser(user_id=authenticated_user.user_id))
+    orders = service.get_orders_by_user(authenticated_user)
     return jsonify({
         "user": f"{authenticated_user.name}",
         "orders": [order.model_dump() for order in orders]

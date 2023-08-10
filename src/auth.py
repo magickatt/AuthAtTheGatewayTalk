@@ -1,10 +1,9 @@
 import logging
 from sqlite3 import Connection
 
-from flask import Request
-
 from factory import create_key_service, create_user_service
 from user import User
+from key import PartialKey
 
 
 def authenticate_request(headers: dict, database_connection: Connection) -> User | None:
@@ -21,3 +20,16 @@ def authenticate_request(headers: dict, database_connection: Connection) -> User
             return user
         logging.warning("API key was supplied but no user found.")
     logging.error(f"No API key was supplied")
+
+
+def extract_user_from_headers(headers: dict) -> User | None:
+    if all(key in headers for key in (
+        "x-mycompany-user-id",
+        "x-mycompany-user-name",
+        "x-mycompany-api-key"
+    )):
+        return User(
+            user_id=headers["x-mycompany-user-id"],
+            name=headers["x-mycompany-user-name"],
+            key=PartialKey(key=headers["x-mycompany-api-key"])
+        )
