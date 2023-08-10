@@ -34,3 +34,7 @@ Could have (and probably should have) done from a REPL, but sometimes it is hand
 
 * https://www.uuidgenerator.net/version4
 * https://www.fakenamegenerator.com
+
+```
+curl --http0.9 -H "x-mycompany-api-key: psiuedo" localhost:8080
+```
