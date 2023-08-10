@@ -1,4 +1,4 @@
-from flask import Response
+from flask import Response, jsonify
 from database import get_database_connection
 from decorators import key_required
 from factory import create_order_service, create_user_service
@@ -8,21 +8,19 @@ from app import create_app
 app = create_app()
 
 @app.route("/")
-def hello_world():
-    return Response({
-        "greeting2": ["hello", "world"]
-    })
-
-@app.route("/users")
-@key_required
-def list_users(api_key):
+def list_users():
     service = create_user_service(get_database_connection())
     users = service.get_users()
-    return Response({f"{api_key}": ["pizza", "cheese"]})
+    return jsonify({
+        "users": [user.model_dump() for user in users]
+    })
 
 @app.route("/orders")
 @key_required
-def list_orders():
+def list_orders(authenticated_user):
     service = create_order_service(get_database_connection())
-    orders = service.get_orders_by_user(PartialUser(user_id="7fdbaa00-d971-47e2-8988-024e78bb6224"))
-    return Response(orders)
+    orders = service.get_orders_by_user(PartialUser(user_id=authenticated_user.user_id))
+    return jsonify({
+        "user": f"{authenticated_user.name}",
+        "orders": [order.model_dump() for order in orders]
+    })

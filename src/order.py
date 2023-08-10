@@ -2,20 +2,19 @@ from enum import Enum
 from sqlite3 import Connection, Row
 from user import User, PartialUser
 from pdb import set_trace
+from pydantic import BaseModel
 
-class OrderStatus(Enum):
-
+class OrderStatus(str, Enum):
+    "Whether an order has been placed (ordered), delivered or returned."
     ORDERED = "ordered"
     DELIVERED = "delivered"
     RETURNED = "returned"
 
-class Order:
-
-    def __init__(self, order_id: str, user: PartialUser, item: str, status: OrderStatus) -> None:
-        self._id = order_id
-        self._user = user
-        self._item = item
-        self._status = status
+class Order(BaseModel):
+    order_id: str
+    user: PartialUser
+    item: str
+    status: OrderStatus
 
 class OrderDatabaseAdapter:
 
@@ -37,7 +36,7 @@ class OrderRepository:
         self._adapter = adapter
 
     def get_orders_by_user(self, user: User) -> list[Order]:
-        records = self._adapter.select_orders_by_user_id(user.id)
+        records = self._adapter.select_orders_by_user_id(user.user_id)
         return [self._hydrate_order_from_record(record) for record in records]
 
     @staticmethod
