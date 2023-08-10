@@ -1,14 +1,19 @@
 from sqlite3 import Connection, Row
+
 from pydantic import BaseModel
+
 from key import Key, KeyRepository
 
+
 class PartialUser(BaseModel):
-    """Lazy-loaded user, used to represent a user without having to fetch the 
+    """Lazy-loaded user, used to represent a user without having to fetch the
     corresponding record from the data source (which is why it only has an ID)"""
+
     user_id: str
 
     def __str__(self) -> str:
         return f"User ID '{self.user_id}'"
+
 
 class User(PartialUser):
     "User that has placed orders."
@@ -20,7 +25,6 @@ class User(PartialUser):
 
 
 class UserDatabaseAdapter:
-
     def __init__(self, database_connection: Connection):
         self._connection = database_connection
 
@@ -31,7 +35,7 @@ class UserDatabaseAdapter:
             ON u.id = k.user_id"""
         cursor = self._connection.cursor()
         return cursor.execute(sql).fetchall()
-    
+
     def select_user_by_api_key(self, api_key: str) -> Row:
         sql = f"""SELECT * 
             FROM users AS u
@@ -41,8 +45,8 @@ class UserDatabaseAdapter:
         cursor = self._connection.cursor()
         return cursor.execute(sql).fetchone()
 
-class UserRepository:
 
+class UserRepository:
     def __init__(self, adapter: UserDatabaseAdapter) -> None:
         self._adapter = adapter
 
@@ -59,11 +63,11 @@ class UserRepository:
         return User(
             user_id=record["id"],
             name=record["name"],
-            key=KeyRepository.hydrate_key_from_record(record)
-        ) 
+            key=KeyRepository.hydrate_key_from_record(record),
+        )
+
 
 class UserService:
-
     def __init__(self, repository: UserRepository) -> None:
         self._repository = repository
 

@@ -1,8 +1,11 @@
 from enum import Enum
-from sqlite3 import Connection, Row
-from user import User, PartialUser
 from pdb import set_trace
+from sqlite3 import Connection, Row
+
 from pydantic import BaseModel
+
+from user import PartialUser, User
+
 
 class OrderStatus(str, Enum):
     "Whether an order has been placed (ordered), delivered or returned."
@@ -10,14 +13,15 @@ class OrderStatus(str, Enum):
     DELIVERED = "delivered"
     RETURNED = "returned"
 
+
 class Order(BaseModel):
     order_id: str
     user: PartialUser
     item: str
     status: OrderStatus
 
-class OrderDatabaseAdapter:
 
+class OrderDatabaseAdapter:
     def __init__(self, database_connection: Connection):
         self._connection = database_connection
 
@@ -30,8 +34,8 @@ class OrderDatabaseAdapter:
         cursor = self._connection.cursor()
         return cursor.execute(sql).fetchall()
 
-class OrderRepository:
 
+class OrderRepository:
     def __init__(self, adapter: OrderDatabaseAdapter) -> None:
         self._adapter = adapter
 
@@ -46,11 +50,11 @@ class OrderRepository:
             order_id=record["id"],
             user=PartialUser(user_id=record["user_id"]),
             item=record["item"],
-            status=OrderStatus(record["status"])
-        ) 
+            status=OrderStatus(record["status"]),
+        )
+
 
 class OrderService:
-
     def __init__(self, repository: OrderRepository) -> None:
         self._repository = repository
 
