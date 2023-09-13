@@ -11,7 +11,7 @@ class StandaloneAuth(SimpleHTTPRequestHandler):
     def do_GET(self):
         # For the demonstration we just want to allow/deny the orders endpoint,
         # otherwise this would represent any conditional logic you require
-        if self.path != "/orders":
+        if self.path != "/api-without-auth/orders":
             self.send_response(200)
         else:
         

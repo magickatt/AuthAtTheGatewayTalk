@@ -24,3 +24,9 @@ spec:
   # - "X-Mycompany-Api-Key"
   - "X-Mycompany-User-Id"
   - "X-Mycompany-User-Name"
+  - "X-Mycompany-Path"
+
+  allowed_headers:
+  - "X-Mycompany-User-Id"
+  - "X-Mycompany-User-Name"
+  - "X-Mycompany-Path"

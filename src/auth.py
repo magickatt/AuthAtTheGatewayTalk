@@ -34,6 +34,7 @@ def extract_user_from_headers(headers: dict) -> User | None:
         # commenting out for demonstration purposes
         # API_KEY
     )):
+        logging.warn(f"User {headers[USER_NAME]} found in headers sent from standalone auth")        
         return User(
             user_id=headers[USER_ID],
             name=headers[USER_NAME],
