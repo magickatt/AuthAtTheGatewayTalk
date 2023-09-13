@@ -1,0 +1,43 @@
+apiVersion: getambassador.io/v3alpha1
+kind:  Mapping
+metadata:
+  name:  api-with-auth
+spec:
+  hostname: "*"
+  prefix: /api-with-auth
+  service: api-with-auth.default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-with-auth
+spec:
+  selector:
+    app: api-with-auth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-with-auth
+  labels:
+    app: api-with-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-with-auth
+  template:
+    metadata:
+      labels:
+        app: api-with-auth
+    spec:
+      containers:
+      - name: flask
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        args: ["api-with-auth"]
+        ports:
+        - containerPort: 5000

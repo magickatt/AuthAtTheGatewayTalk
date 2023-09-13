@@ -1,0 +1,18 @@
+image:
+  # Please change the registry host depending on your container runtime
+  registry: host.docker.internal:5000
+  repository: auth-at-the-gateway
+  tag: 0.52 
+
+emissary-ingress:
+  fullnameOverride: ''
+  namespaceOverride: 'emissary'
+  service:
+    type: NodePort
+    ports:
+      - name: http
+        port: 8080
+        targetPort: 8080
+          # protocol: TCP
+          # nodePort: 30080
+          # hostPort: 80
