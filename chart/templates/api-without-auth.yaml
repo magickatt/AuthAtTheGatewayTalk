@@ -1,0 +1,46 @@
+# Map requests with the URI prefix /api-with-auth to the Service below
+apiVersion: getambassador.io/v3alpha1
+kind:  Mapping
+metadata:
+  name:  api-without-auth
+spec:
+  hostname: "*"
+  prefix: /api-without-auth
+  service: api-without-auth.default
+---
+# Route requests to the corresponding containers below
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-without-auth
+spec:
+  selector:
+    app: api-without-auth
+  ports: # Map the HTTP port to the container port
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+---
+# Run the container image
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-without-auth
+  labels:
+    app: api-without-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-without-auth
+  template:
+    metadata:
+      labels:
+        app: api-without-auth
+    spec:
+      containers:
+      - name: flask
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        args: ["api-without-auth"]
+        ports:
+        - containerPort: 5000

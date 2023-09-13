@@ -17,7 +17,7 @@ class StandaloneAuth(BaseHTTPRequestHandler):
         self.end_headers()
 
 if __name__ == "__main__":        
-    host = "localhost"
+    host = ""
     port = 8080
     http_server = HTTPServer((host, port), StandaloneAuth)
     logging.info("Standalone Auth started at http://%s:%s", host, port)

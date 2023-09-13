@@ -1,0 +1,46 @@
+# Map requests with the URI prefix /api-with-auth to the Service below
+apiVersion: getambassador.io/v3alpha1
+kind:  Mapping
+metadata:
+  name: standalone-auth
+spec:
+  hostname: "*"
+  prefix: /standalone-auth
+  service: standalone-auth.default
+---
+# Route requests to the corresponding containers below
+apiVersion: v1
+kind: Service
+metadata:
+  name: standalone-auth
+spec:
+  selector:
+    app: standalone-auth
+  ports: # Map the ExtAuth port to the container port
+    - protocol: TCP
+      port: 3000
+      targetPort: 8080
+---
+# Run the container image
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: standalone-auth
+  labels:
+    app: standalone-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: standalone-auth
+  template:
+    metadata:
+      labels:
+        app: standalone-auth
+    spec:
+      containers:
+      - name: http-server
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        args: ["standalone-auth"]
+        ports:
+        - containerPort: 8080

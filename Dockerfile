@@ -13,4 +13,5 @@ RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r
 COPY . .
 
 ENV PYTHONPATH "/var/python/src"
+ENV PYTHONUNBUFFERED "1"
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]

@@ -4,11 +4,13 @@ from decorators import key_required
 from factory import create_order_service, create_user_service
 from user import PartialUser
 from app import create_app
+import logging
 
 app = create_app()
 
 @app.route("/")
 def list_users():
+    logging.info("Listing users with orders")
     service = create_user_service(get_database_connection())
     users = service.get_users()
     return jsonify({
@@ -18,6 +20,7 @@ def list_users():
 @app.route("/orders")
 @key_required
 def list_orders(authenticated_user):
+    logging.info("Listing orders for user")
     service = create_order_service(get_database_connection())
     orders = service.get_orders_by_user(authenticated_user)
     return jsonify({

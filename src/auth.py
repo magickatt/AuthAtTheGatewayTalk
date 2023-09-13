@@ -26,10 +26,14 @@ def extract_user_from_headers(headers: dict) -> User | None:
     if all(key in headers for key in (
         "x-mycompany-user-id",
         "x-mycompany-user-name",
-        "x-mycompany-api-key"
+        # Probably want to still check this is set ideally,
+        # commenting out for demonstration purposes
+        # "x-mycompany-api-key"
     )):
         return User(
             user_id=headers["x-mycompany-user-id"],
             name=headers["x-mycompany-user-name"],
             key=PartialKey(key=headers["x-mycompany-api-key"])
         )
+    else:
+        logging.error("User cannot be determined from headers")        

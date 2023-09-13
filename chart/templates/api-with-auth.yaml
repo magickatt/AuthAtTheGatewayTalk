@@ -1,3 +1,4 @@
+# Map requests with the URI prefix /api-with-auth to the Service below
 apiVersion: getambassador.io/v3alpha1
 kind:  Mapping
 metadata:
@@ -6,7 +7,9 @@ spec:
   hostname: "*"
   prefix: /api-with-auth
   service: api-with-auth.default
+  bypass_auth: true # Disables the Emissary Ingress AuthService for demonstration purposes
 ---
+# Route requests to the corresponding containers below
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,11 +17,12 @@ metadata:
 spec:
   selector:
     app: api-with-auth
-  ports:
+  ports: # Map the HTTP port to the container port
     - protocol: TCP
       port: 80
       targetPort: 5000
 ---
+# Run the container image
 apiVersion: apps/v1
 kind: Deployment
 metadata:

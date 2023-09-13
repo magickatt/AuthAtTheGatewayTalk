@@ -1,0 +1,23 @@
+# https://www.getambassador.io/docs/emissary/latest/topics/running/services/auth-service
+apiVersion: getambassador.io/v3alpha1
+kind: AuthService
+metadata:
+  name: standalone-auth
+spec:
+  auth_service: "standalone-auth.default:3000"
+  proto: http
+  
+  # How to handle authn/authz failure
+  failure_mode_allow: false
+  timeout_ms: 1000
+  status_on_error:
+    code: 403
+
+  # Headers expected to contain authentication credentials
+  allowed_request_headers:
+  - "x-mycompany-api-key"
+  
+  # Headers that we expect/allow to be added by standalone-auth after authn/authz
+  allowed_authorization_headers:
+  - "x-mycompany-user-id"
+  - "x-mycompany-user-name"
