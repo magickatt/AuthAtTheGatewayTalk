@@ -2,7 +2,7 @@ image:
   # Please change the registry host depending on your container runtime
   registry: host.docker.internal:5000
   repository: auth-at-the-gateway
-  tag: "1.5" 
+  tag: "1.74" 
 
 emissary-ingress:
   fullnameOverride: ''

@@ -3,7 +3,7 @@ name: auth-at-the-gateway-talk
 description: API with auth, without auth and standalone auth plus Emissary Ingress
 
 type: application
-version: 1.1.1
+version: 1.1.2
 appVersion: "3.7.2" # Emissary Ingress
 
 # dependencies:
