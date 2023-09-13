@@ -1,20 +1,38 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, SimpleHTTPRequestHandler, HTTPServer
 from auth import authenticate_request
 from database import create_database_connection
 import logging
+from headers import USER_NAME, USER_ID
 
 database_connection = create_database_connection()
 
-class StandaloneAuth(BaseHTTPRequestHandler):
+class StandaloneAuth(SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        if (user := authenticate_request(self.headers, database_connection)):
-            self.send_header("x-mycompany-user-id", user.user_id)
-            self.send_header("x-mycompany-user-name", user.name)
+        # For the demonstration we just want to allow/deny the orders endpoint,
+        # otherwise this would represent any conditional logic you require
+        if self.path != "orders":
             self.send_response(200)
         else:
-            self.send_response(401)
+        
+            # For the orders endpoint we want to handle authentication
+            if (user := authenticate_request(self.headers, database_connection)):
+                logging.error("Help")
+                self.send_header(USER_ID, user.user_id)
+                self.send_header(USER_NAME, user.name)
+                # self.end_headers()
+                self.send_response(200)
+            else:
+                self.send_response(401)
+
         self.end_headers()
+    
+    # def end_headers(self):
+    #     self.send_auth_headers()
+    #     SimpleHTTPRequestHandler.end_headers(self)
+
+    # def send_my_headers(self):
+    #     self.send_header("Access-Control-Allow-Origin", "*")
 
 if __name__ == "__main__":        
     host = ""
