@@ -16,11 +16,11 @@ spec:
   # Headers expected to contain authentication credentials
   allowed_request_headers:
   - "X-Mycompany-Api-Key"
-  - "X-Mycompany-User-Id"
-  - "X-Mycompany-User-Name"
+  # - "X-Mycompany-User-Id"
+  # - "X-Mycompany-User-Name"
   
   # Headers that we expect/allow to be added by standalone-auth after authn/authz
   allowed_authorization_headers:
-  - "X-Mycompany-Api-Key"
+  # - "X-Mycompany-Api-Key"
   - "X-Mycompany-User-Id"
   - "X-Mycompany-User-Name"

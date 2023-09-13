@@ -11,28 +11,21 @@ class StandaloneAuth(SimpleHTTPRequestHandler):
     def do_GET(self):
         # For the demonstration we just want to allow/deny the orders endpoint,
         # otherwise this would represent any conditional logic you require
-        if self.path != "orders":
+        if self.path != "/orders":
             self.send_response(200)
         else:
         
             # For the orders endpoint we want to handle authentication
             if (user := authenticate_request(self.headers, database_connection)):
-                logging.error("Help")
+                self.send_response(200)
                 self.send_header(USER_ID, user.user_id)
                 self.send_header(USER_NAME, user.name)
-                # self.end_headers()
-                self.send_response(200)
             else:
                 self.send_response(401)
 
+        self.send_header("X-Mycompany-Path", self.path)
         self.end_headers()
-    
-    # def end_headers(self):
-    #     self.send_auth_headers()
-    #     SimpleHTTPRequestHandler.end_headers(self)
 
-    # def send_my_headers(self):
-    #     self.send_header("Access-Control-Allow-Origin", "*")
 
 if __name__ == "__main__":        
     host = ""
