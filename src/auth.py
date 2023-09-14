@@ -2,11 +2,9 @@ import logging
 from sqlite3 import Connection
 
 from factory import create_key_service, create_user_service
-from user import User
-from key import PartialKey
 from headers import API_KEY, USER_ID, USER_NAME
-
-
+from key import PartialKey
+from user import User
 
 
 def authenticate_request(headers: dict, database_connection: Connection) -> User | None:
@@ -27,18 +25,25 @@ def authenticate_request(headers: dict, database_connection: Connection) -> User
 
 
 def extract_user_from_headers(headers: dict) -> User | None:
-    if all(key in headers for key in (
-        USER_ID,
-        USER_NAME,
-        # Probably want to still check this is set ideally,
-        # commenting out for demonstration purposes
-        # API_KEY
-    )):
-        logging.warn(f"User {headers[USER_NAME]} found in headers sent from standalone auth")        
+    if all(
+        key in headers
+        for key in (
+            USER_ID,
+            USER_NAME,
+            # Probably want to still check this is set ideally,
+            # commenting out for demonstration purposes
+            # API_KEY
+        )
+    ):
+        logging.warn(
+            f"Headers were sent from standalone auth, User {headers[USER_NAME]} found in headers."
+        )
         return User(
             user_id=headers[USER_ID],
             name=headers[USER_NAME],
-            key=PartialKey(key=headers[API_KEY])
+            key=PartialKey(key=headers[API_KEY]),
         )
     else:
-        logging.error(f"User cannot be extracted from headers (headers found are {' '.join(headers.keys())})")        
+        logging.error(
+            f"Not enough headers were sent from standalone auth (headers found are {' '.join(headers.keys())})"
+        )

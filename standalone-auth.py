@@ -31,6 +31,7 @@ if __name__ == "__main__":
     host = ""
     port = 8080
     http_server = HTTPServer((host, port), StandaloneAuth)
+    logging.basicConfig(level=logging.INFO)
     logging.info("Standalone Auth started at http://%s:%s", host, port)
 
     try:

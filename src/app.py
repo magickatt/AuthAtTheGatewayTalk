@@ -1,7 +1,9 @@
+import logging
+
 from flask import Flask
 from flask.logging import default_handler
+
 from database import close_database
-import logging
 
 
 def create_app():
@@ -9,7 +11,8 @@ def create_app():
 
     root = logging.getLogger()
     root.addHandler(default_handler)
-    
+    root.setLevel(logging.INFO)
+
     app.teardown_appcontext(close_database)
-    
+
     return app

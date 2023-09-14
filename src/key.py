@@ -4,13 +4,16 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+
 class PartialKey(BaseModel):
     key: str
+
 
 class Key(PartialKey):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
     expires_at: Optional[datetime]
+
 
 class KeyDatabaseAdapter:
     def __init__(self, database_connection: Connection):

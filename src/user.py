@@ -2,7 +2,7 @@ from sqlite3 import Connection, Row
 
 from pydantic import BaseModel
 
-from key import PartialKey, KeyRepository
+from key import KeyRepository, PartialKey
 
 
 class PartialUser(BaseModel):

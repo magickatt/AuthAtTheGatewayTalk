@@ -23,8 +23,8 @@ def key_required(f):
 
     return decorator
 
-def headers_required(f):
 
+def headers_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         if user := extract_user_from_headers(request.headers):
