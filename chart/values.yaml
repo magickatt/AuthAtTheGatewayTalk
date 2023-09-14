@@ -1,15 +1,16 @@
 image:
-  # Please change the registry host depending on your container runtime
-  registry: host.docker.internal:5000
+  # Referencing the container image this way works with Docker Desktop
+  # https://www.docker.com/blog/how-kubernetes-works-under-the-hood-with-docker-desktop/
   repository: auth-at-the-gateway
-  tag: "1.14" 
+  tag: "1.15" 
 
-emissary-ingress:
-  fullnameOverride: ''
-  namespaceOverride: 'emissary'
-  service:
-    type: NodePort
-    ports:
-      - name: http
-        port: 8080
-        targetPort: 8080
+# From bundled version of the demonstration, please ignore for now
+# emissary-ingress:
+#   fullnameOverride: ''
+#   namespaceOverride: 'emissary'
+#   service:
+#     type: NodePort
+#     ports:
+#       - name: http
+#         port: 8080
+#         targetPort: 8080

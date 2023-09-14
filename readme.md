@@ -1,23 +1,31 @@
 # Centralise legacy auth at the ingress gateway
 
+
+
 ## Installing
 
 https://www.getambassador.io/docs/emissary/latest/topics/install/helm#install-with-helm-1
 
+First install the Emissary Ingress CustomResourceDefintions
 ```
 kubectl apply -f https://app.getambassador.io/yaml/emissary/3.7.2/emissary-crds.yaml
 kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext -n emissary-system
 ```
 
+Then install Emissary Ingress itself
 ```
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.11/config/manifests/metallb-native.yaml
-```
+helm install -n emissary --create-namespace \
+     emissary-ingress datawire/emissary-ingress && \
+ kubectl rollout status  -n emissary deployment/emissary-ingress -w```
 
+Next build the container image
+```
+docker build . --tag=auth-at-the-gateway:1.16```
+
+Finally install this demonstration
 ```
 helm install auth-at-the-gateway chart
 ```
-
---trusted-host pypi.org --trusted-host files.pythonhosted.org
 
 https://www.docker.com/blog/how-kubernetes-works-under-the-hood-with-docker-desktop/
 
