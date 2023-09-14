@@ -1,6 +1,6 @@
 # Centralise legacy auth at the ingress gateway
 
-
+![ExtAuth request flow](example.png)
 
 ## Installing
 
